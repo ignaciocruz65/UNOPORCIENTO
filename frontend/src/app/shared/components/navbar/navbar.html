@@ -1,0 +1,34 @@
+<nav class="sticky top-0 z-20 bg-black backdrop-blur border-b border-zinc-800">
+  <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
+    <a routerLink="/" class="text-xl font-extrabold tracking-tight text-white">
+      <img src="assets/uno.jpg" alt="UNO%" class="w-12 h-12">
+    </a>
+
+    <div class="flex items-center gap-3 text-sm">
+      @if (auth.currentUser()) {
+        <span class="hidden sm:inline text-zinc-400">
+          Hola, <span class="text-white font-medium">{{ auth.currentUser()?.name }}</span>
+        </span>
+        <button
+          (click)="logout()"
+          class="rounded-lg border border-zinc-700 px-3 py-1.5 text-zinc-200 hover:bg-zinc-800 transition"
+        >
+          Salir
+        </button>
+      } @else {
+        <a
+          routerLink="/login"
+          class="rounded-lg px-3 py-1.5 text-zinc-200 hover:bg-zinc-800 transition"
+        >
+          Ingresar
+        </a>
+        <a
+          routerLink="/register"
+          class="rounded-lg bg-red-900 px-3 py-1.5 font-semibold text-white hover:bg-red-800 transition"
+        >
+          Sumate
+        </a>
+      }
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,49 @@
+<section class="min-h-[80vh] bg-zinc-950 text-white flex items-center justify-center px-4 py-16">
+  <div class="w-full max-w-sm">
+    <h1 class="text-2xl font-bold text-center">Ingresar</h1>
+    <p class="mt-1 text-center text-zinc-400 text-sm">
+      Accedé a tu cuenta de Uno%
+    </p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" class="mt-8 space-y-4">
+      <div>
+        <label class="block text-sm text-zinc-300 mb-1">Email</label>
+        <input
+          type="email"
+          formControlName="email"
+          class="w-full rounded-lg bg-zinc-900 border border-zinc-700 px-3 py-2 text-white focus:outline-none focus:border-lime-400"
+          placeholder="tu&#64;email.com"
+        />
+      </div>
+
+      <div>
+        <label class="block text-sm text-zinc-300 mb-1">Contraseña</label>
+        <input
+          type="password"
+          formControlName="password"
+          class="w-full rounded-lg bg-zinc-900 border border-zinc-700 px-3 py-2 text-white focus:outline-none focus:border-lime-400"
+          placeholder="••••••••"
+        />
+      </div>
+
+      @if (errorMessage()) {
+        <p class="text-sm text-red-400">{{ errorMessage() }}</p>
+      }
+
+      <button
+        type="submit"
+        [disabled]="loading()"
+        class="w-full rounded-lg bg-red-900 px-4 py-2.5 font-semibold text-white hover:bg-red-800 transition disabled:opacity-60"
+      >
+        {{ loading() ? 'Ingresando…' : 'Ingresar' }}
+      </button>
+    </form>
+
+    <p class="mt-6 text-center text-sm text-zinc-400">
+      ¿Todavía no tenés cuenta?
+      <a routerLink="/register" class="text-red-900 font-medium hover:underline">
+        Registrate
+      </a>
+    </p>
+  </div>
+</section>

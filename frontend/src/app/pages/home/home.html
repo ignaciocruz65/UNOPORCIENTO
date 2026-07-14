@@ -1,0 +1,104 @@
+<section class="bg-zinc-950 text-white">
+  <div class="mx-auto max-w-6xl px-4 py-20 sm:py-28 text-center">
+    <p class="text-red-900 font-semibold tracking-wide uppercase text-sm">
+      Gimnasio en tu barrio
+    </p>
+    <h1 class="mt-3 text-4xl sm:text-6xl font-extrabold tracking-tight">
+      Entrená un <span class="text-red-900">UNO%</span> mejor, cada día
+    </h1>
+    <p class="mt-5 text-zinc-400 max-w-2xl mx-auto text-lg">
+      Cerca de tu casa, con equipamiento completo, buena onda y planes pensados
+      para que arranques hoy mismo.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a
+        routerLink="/register"
+        class="rounded-lg bg-red-900 px-6 py-3 font-semibold text-white hover:bg-red-800 transition"
+      >
+        Quiero sumarme
+      </a>
+      <a
+        href="#planes"
+        class="rounded-lg border border-zinc-700 px-6 py-3 font-semibold text-zinc-100 hover:bg-zinc-800 transition"
+      >
+        Ver planes
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="bg-zinc-900 text-white">
+  <div class="mx-auto max-w-6xl px-4 py-16">
+    <h2 class="text-2xl sm:text-3xl font-bold text-center">Qué te ofrece Uno%</h2>
+    <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      @for (f of features; track f.title) {
+        <div class="rounded-2xl border border-zinc-800 bg-zinc-950 p-6">
+          <h3 class="font-semibold text-red-900">{{ f.title }}</h3>
+          <p class="mt-2 text-sm text-zinc-400">{{ f.desc }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section id="planes" class="bg-zinc-950 text-white">
+  <div class="mx-auto max-w-6xl px-4 py-16">
+    <h2 class="text-2xl sm:text-3xl font-bold text-center">Planes</h2>
+    <p class="mt-2 text-center text-zinc-400">Elegí el que mejor se adapte a vos</p>
+
+    @if (loadingPlans()) {
+      <p class="mt-10 text-center text-zinc-500">Cargando planes…</p>
+    } @else if (plans().length === 0) {
+      <p class="mt-10 text-center text-zinc-500">
+        Todavía no hay planes cargados. Volvé a intentarlo más tarde.
+      </p>
+    } @else {
+      <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        @for (plan of plans(); track plan.id) {
+          <div class="rounded-2xl border border-zinc-800 bg-zinc-900 p-6 flex flex-col">
+            <h3 class="text-lg font-bold">{{ plan.name }}</h3>
+            <p class="mt-2 text-sm text-zinc-400 flex-1">{{ plan.description }}</p>
+            <p class="mt-4 text-3xl font-extrabold text-lime-400">
+              ${{ plan.price }}
+            </p>
+            <p class="text-xs text-zinc-500">
+              @if (plan.durationDays === 1) {
+                pase por un día
+              } @else {
+                cada {{ plan.durationDays }} días
+              }
+            </p>
+            <a
+              routerLink="/register"
+              class="mt-5 rounded-lg bg-lime-400 px-4 py-2 text-center font-semibold text-zinc-950 hover:bg-lime-300 transition"
+            >
+              Elegir plan
+            </a>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<section class="bg-zinc-900 text-white">
+  <div class="mx-auto max-w-6xl px-4 py-16 grid gap-10 sm:grid-cols-2">
+    <div>
+      <h2 class="text-2xl sm:text-3xl font-bold">Horarios</h2>
+      <ul class="mt-6 space-y-3">
+        @for (s of schedule; track s.day) {
+          <li class="flex justify-between border-b border-zinc-800 pb-2 text-zinc-300">
+            <span>{{ s.day }}</span>
+            <span class="font-medium text-white">{{ s.hours }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+    <div>
+      <h2 class="text-2xl sm:text-3xl font-bold">Contacto</h2>
+      <p class="mt-6 text-zinc-300">📍 Pasco 649, San Cristobal</p>
+      <p class="mt-2 text-zinc-300">📞 01137818940</p>
+      <p class="mt-2 text-zinc-300">📸 &#64;unoporciento.gym</p>
+    </div>
+  </div>
+</section>
