@@ -1,34 +1,63 @@
-<nav class="sticky top-0 z-20 bg-black backdrop-blur border-b border-zinc-800">
-  <div class="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-    <a routerLink="/" class="text-xl font-extrabold tracking-tight text-white">
-      <img src="assets/uno.jpg" alt="UNO%" class="w-12 h-12">
-    </a>
+<nav class="bg-black border-b border-red-600 fixed w-full z-50 top-0 transition-all">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex justify-between items-center h-16">
+      <div class="flex items-center">
+        <a routerLink="/" class="text-2xl font-black tracking-widest text-white italic">
+          <img src="/assets/uno.jpg" alt="Logo" class="w-12 h-12">
+        </a>
+      </div>
+      
+      <div class="hidden md:flex items-center space-x-8">
+        <a routerLink="/" class="text-gray-300 hover:text-red-500 font-medium transition-colors">Inicio</a>
+        
+        @if (authService.currentUser() === null) {
+          <div class="flex space-x-4">
+            <a routerLink="/login" class="px-5 py-2 border-2 border-red-600 text-red-500 font-bold rounded hover:bg-red-600 hover:text-white transition-all">
+              Ingresar
+            </a>
+            <a routerLink="/register" class="px-5 py-2 bg-red-600 text-white font-bold rounded hover:bg-red-700 transition-all">
+              Asociarse
+            </a>
+          </div>
+        } @else {
+          <div class="flex items-center space-x-4">
+            <span class="text-gray-400 font-medium">Hola, <span class="text-white">{{ authService.currentUser()?.name }}</span></span>
+            <button (click)="logout()" class="px-4 py-2 text-sm font-bold text-gray-400 hover:text-red-500 transition-colors">
+              Salir
+            </button>
+          </div>
+        }
+      </div>
 
-    <div class="flex items-center gap-3 text-sm">
-      @if (auth.currentUser()) {
-        <span class="hidden sm:inline text-zinc-400">
-          Hola, <span class="text-white font-medium">{{ auth.currentUser()?.name }}</span>
-        </span>
-        <button
-          (click)="logout()"
-          class="rounded-lg border border-zinc-700 px-3 py-1.5 text-zinc-200 hover:bg-zinc-800 transition"
-        >
-          Salir
+      <div class="md:hidden flex items-center">
+        <button (click)="toggleMenu()" class="text-gray-300 hover:text-red-500 focus:outline-none">
+          <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
         </button>
-      } @else {
-        <a
-          routerLink="/login"
-          class="rounded-lg px-3 py-1.5 text-zinc-200 hover:bg-zinc-800 transition"
-        >
-          Ingresar
-        </a>
-        <a
-          routerLink="/register"
-          class="rounded-lg bg-red-900 px-3 py-1.5 font-semibold text-white hover:bg-red-800 transition"
-        >
-          Sumate
-        </a>
-      }
+      </div>
     </div>
   </div>
+
+  @if (isMenuOpen()) {
+    <div class="md:hidden bg-neutral-900 border-b border-red-600">
+      <ul class="px-4 pt-2 pb-4 space-y-2">
+        <li><a routerLink="/" (click)="toggleMenu()" class="block py-2 text-gray-300 hover:text-white">Inicio</a></li>
+        
+        @if (authService.currentUser() === null) {
+          <li class="pt-2">
+            <a routerLink="/login" (click)="toggleMenu()" class="block w-full text-center py-2 border border-red-600 text-red-500 font-bold rounded">Ingresar</a>
+          </li>
+          <li>
+            <a routerLink="/register" (click)="toggleMenu()" class="block w-full text-center py-2 bg-red-600 text-white font-bold rounded mt-2">Asociarse</a>
+          </li>
+        } @else {
+          <li class="pt-2 border-t border-neutral-800">
+            <span class="block py-2 text-gray-400">Usuario: {{ authService.currentUser()?.name }}</span>
+            <button (click)="logout()" class="block w-full text-left py-2 text-red-500 font-bold">Cerrar Sesión</button>
+          </li>
+        }
+      </ul>
+    </div>
+  }
 </nav>

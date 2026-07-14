@@ -1,69 +1,50 @@
-<section class="min-h-[80vh] bg-zinc-950 text-white flex items-center justify-center px-4 py-16">
-  <div class="w-full max-w-sm">
-    <h1 class="text-2xl font-bold text-center">Sumate a Uno%</h1>
-    <p class="mt-1 text-center text-zinc-400 text-sm">
-      Creá tu cuenta para empezar a entrenar
-    </p>
+<div class="min-h-screen bg-black flex items-center justify-center py-12 px-4 pt-20">
+  <div class="max-w-md w-full bg-neutral-900 border border-neutral-800 p-8 rounded-lg shadow-2xl">
+    <div class="text-center mb-8">
+      <h2 class="text-3xl font-black text-white uppercase italic">Registrarse</h2>
+      <p class="text-gray-400 mt-2">Creá tu cuenta de socio</p>
+    </div>
 
-    <form [formGroup]="form" (ngSubmit)="submit()" class="mt-8 space-y-4">
+    @if (errorMessage()) {
+      <div class="mb-6 p-4 bg-red-900/50 border border-red-500 text-red-200 rounded text-sm text-center">
+        {{ errorMessage() }}
+      </div>
+    }
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-5">
       <div>
-        <label class="block text-sm text-zinc-300 mb-1">Nombre</label>
-        <input
-          type="text"
-          formControlName="name"
-          class="w-full rounded-lg bg-zinc-900 border border-zinc-700 px-3 py-2 text-white focus:outline-none focus:border-lime-400"
-          placeholder="Tu nombre"
-        />
+        <label class="block text-sm font-bold text-gray-300 mb-2">Nombre Completo</label>
+        <input type="text" formControlName="name"
+               class="w-full bg-black border border-neutral-700 rounded px-4 py-3 text-white focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-all"
+               placeholder="Juan Pérez">
       </div>
 
       <div>
-        <label class="block text-sm text-zinc-300 mb-1">Email</label>
-        <input
-          type="email"
-          formControlName="email"
-          class="w-full rounded-lg bg-zinc-900 border border-zinc-700 px-3 py-2 text-white focus:outline-none focus:border-lime-400"
-          placeholder="tu&#64;email.com"
-        />
+        <label class="block text-sm font-bold text-gray-300 mb-2">Correo Electrónico</label>
+        <input type="email" formControlName="email"
+               class="w-full bg-black border border-neutral-700 rounded px-4 py-3 text-white focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-all"
+               placeholder="tu@email.com">
       </div>
 
       <div>
-        <label class="block text-sm text-zinc-300 mb-1">Teléfono (opcional)</label>
-        <input
-          type="tel"
-          formControlName="phone"
-          class="w-full rounded-lg bg-zinc-900 border border-zinc-700 px-3 py-2 text-white focus:outline-none focus:border-lime-400"
-          placeholder="11 5555-5555"
-        />
+        <label class="block text-sm font-bold text-gray-300 mb-2">Contraseña</label>
+        <input type="password" formControlName="password"
+               class="w-full bg-black border border-neutral-700 rounded px-4 py-3 text-white focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-all"
+               placeholder="Mínimo 6 caracteres">
       </div>
 
-      <div>
-        <label class="block text-sm text-zinc-300 mb-1">Contraseña</label>
-        <input
-          type="password"
-          formControlName="password"
-          class="w-full rounded-lg bg-zinc-900 border border-zinc-700 px-3 py-2 text-white focus:outline-none focus:border-lime-400"
-          placeholder="Mínimo 6 caracteres"
-        />
-      </div>
-
-      @if (errorMessage()) {
-        <p class="text-sm text-red-400">{{ errorMessage() }}</p>
-      }
-
-      <button
-        type="submit"
-        [disabled]="loading()"
-        class="w-full rounded-lg bg-red-900 px-4 py-2.5 font-semibold text-white hover:bg-red-800 transition disabled:opacity-60"
-      >
-        {{ loading() ? 'Creando cuenta…' : 'Crear cuenta' }}
+      <button type="submit" [disabled]="registerForm.invalid || isLoading()"
+              class="w-full mt-4 py-3 bg-red-600 text-white font-bold rounded uppercase hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex justify-center">
+        @if (isLoading()) {
+          <span class="animate-pulse">Creando cuenta...</span>
+        } @else {
+          <span>Unirme al Gimnasio</span>
+        }
       </button>
     </form>
 
-    <p class="mt-6 text-center text-sm text-zinc-400">
-      ¿Ya tenés cuenta?
-      <a routerLink="/login" class="text-red-900 font-medium hover:underline">
-        Ingresá
-      </a>
+    <p class="mt-6 text-center text-gray-400 text-sm">
+      ¿Ya sos socio? <a routerLink="/login" class="text-red-500 font-bold hover:underline">Ingresá acá</a>
     </p>
   </div>
-</section>
+</div>

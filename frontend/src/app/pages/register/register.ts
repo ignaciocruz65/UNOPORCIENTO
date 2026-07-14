@@ -7,43 +7,37 @@ import { AuthService } from '../../core/services/auth.service';
   selector: 'app-register',
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
-  templateUrl: './register.html',
+  templateUrl: './register.html'
 })
 export class Register {
-  private readonly fb = inject(FormBuilder);
-  private readonly auth = inject(AuthService);
-  private readonly router = inject(Router);
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-  readonly loading = signal(false);
-  readonly errorMessage = signal<string | null>(null);
+  isLoading = signal(false);
+  errorMessage = signal<string | null>(null);
 
-  readonly form = this.fb.nonNullable.group({
-    name: ['', [Validators.required]],
+  registerForm = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(3)]],
     email: ['', [Validators.required, Validators.email]],
-    phone: [''],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
-  submit(): void {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      return;
-    }
+  onSubmit() {
+    if (this.registerForm.invalid) return;
 
-    this.loading.set(true);
+    this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    this.auth.register(this.form.getRawValue()).subscribe({
+    this.authService.register(this.registerForm.getRawValue() as any).subscribe({
       next: () => {
-        this.loading.set(false);
-        this.router.navigate(['/']);
+        this.isLoading.set(false);
+        this.router.navigate(['/']); 
       },
       error: (err) => {
-        this.loading.set(false);
-        this.errorMessage.set(
-          err?.error?.message ?? 'No pudimos crear tu cuenta. Probá de nuevo.',
-        );
-      },
+        this.isLoading.set(false);
+        this.errorMessage.set('Error al registrar. Puede que el correo ya esté en uso.');
+      }
     });
   }
 }
