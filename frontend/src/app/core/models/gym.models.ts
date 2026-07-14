@@ -12,7 +12,8 @@ export type UserRole = 'member' | 'admin';
 export interface AuthUser {
   id: string;
   email: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   role: UserRole;
 }
 
@@ -22,13 +23,47 @@ export interface AuthResponse {
 }
 
 export interface RegisterPayload {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
-  password: string;
+  dni: string;
+  birthDate: string;
   phone?: string;
+  password: string;
 }
 
 export interface LoginPayload {
   email: string;
   password: string;
+}
+
+export type SubscriptionStatus = 'active' | 'expired' | 'cancelled';
+export type PaymentStatus = 'paid' | 'pending';
+
+export interface Payment {
+  id: string;
+  amount: number;
+  method: string;
+  status: PaymentStatus;
+  paidAt: string | null;
+  createdAt: string;
+}
+
+export interface Subscription {
+  id: string;
+  plan: Plan;
+  startDate: string;
+  dueDate: string;
+  status: SubscriptionStatus;
+  payments: Payment[];
+}
+
+export interface InstagramPost {
+  id: string;
+  caption?: string;
+  mediaType: string;
+  mediaUrl: string;
+  thumbnailUrl?: string;
+  permalink: string;
+  timestamp: string;
 }

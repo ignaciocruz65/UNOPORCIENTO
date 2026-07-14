@@ -1,7 +1,8 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { PlansService } from '../../core/services/plans.service';
-import { Plan } from '../../core/models/gym.models';
+import { InstagramService } from '../../core/services/instagram.service';
+import { InstagramPost, Plan } from '../../core/models/gym.models';
 
 @Component({
   selector: 'app-home',
@@ -11,9 +12,14 @@ import { Plan } from '../../core/models/gym.models';
 })
 export class Home implements OnInit {
   private readonly plansService = inject(PlansService);
+  private readonly instagramService = inject(InstagramService);
 
   readonly plans = signal<Plan[]>([]);
   readonly loadingPlans = signal(true);
+
+  readonly instagramPosts = signal<InstagramPost[]>([]);
+  readonly instagramConfigured = signal(true);
+  readonly loadingInstagram = signal(true);
 
   readonly schedule = [
     { day: 'Lunes a Viernes', hours: '07:00 – 22:00' },
@@ -28,11 +34,11 @@ export class Home implements OnInit {
     },
     {
       title: 'Clases grupales',
-      desc: 'Funcional, boxeo y taekwondo — muy pronto con reserva de cupo online.',
+      desc: 'Funcional, spinning y más — muy pronto con reserva de cupo online.',
     },
     {
       title: 'Ingreso con QR',
-      desc: 'Accedé al gimnasio escaneando tu carnet digital.',
+      desc: 'Accedé al gimnasio escaneando tu carnet digital, sin filas.',
     },
     {
       title: 'Seguimiento',
@@ -47,6 +53,15 @@ export class Home implements OnInit {
         this.loadingPlans.set(false);
       },
       error: () => this.loadingPlans.set(false),
+    });
+
+    this.instagramService.getFeed().subscribe({
+      next: (res) => {
+        this.instagramConfigured.set(res.configured);
+        this.instagramPosts.set(res.posts);
+        this.loadingInstagram.set(false);
+      },
+      error: () => this.loadingInstagram.set(false),
     });
   }
 }

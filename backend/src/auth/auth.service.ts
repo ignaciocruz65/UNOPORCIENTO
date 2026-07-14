@@ -25,11 +25,19 @@ export class AuthService {
       throw new ConflictException('Ya existe una cuenta con ese email');
     }
 
+    const existingDni = await this.usersService.findByDni(dto.dni);
+    if (existingDni) {
+      throw new ConflictException('Ya existe una cuenta con ese DNI');
+    }
+
     const hashed = await bcrypt.hash(dto.password, SALT_ROUNDS);
     const user = await this.usersService.create({
       email: dto.email,
       password: hashed,
-      name: dto.name,
+      firstName: dto.firstName,
+      lastName: dto.lastName,
+      dni: dto.dni,
+      birthDate: dto.birthDate,
       phone: dto.phone,
       role: UserRole.MEMBER,
     });
@@ -58,7 +66,8 @@ export class AuthService {
       user: {
         id: user.id,
         email: user.email,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         role: user.role,
       },
     };

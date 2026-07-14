@@ -1,58 +1,138 @@
-<div class="min-h-screen bg-neutral-950 pt-16 font-sans">
-  
-  <section class="relative bg-black py-32 px-4 border-b-4 border-red-600">
-    <div class="max-w-4xl mx-auto text-center">
-      <h1 class="text-5xl md:text-7xl font-black text-white uppercase tracking-tight italic mb-6">
-        Exigí el <span class="text-red-600">Máximo</span>
-      </h1>
-      <p class="text-xl md:text-2xl text-gray-400 font-medium mb-10">
-        Entrenamiento sin excusas. Equipamiento de élite y el mejor ambiente para superar tus límites.
-      </p>
-      <a routerLink="/register" class="inline-block px-8 py-4 bg-red-600 text-white text-lg font-bold uppercase rounded hover:bg-red-700 transition-transform hover:scale-105">
-        Quiero Empezar
+<section class="bg-black text-white">
+  <div class="mx-auto max-w-6xl px-4 py-20 sm:py-28 text-center">
+    <p class="neon-text font-semibold tracking-wide uppercase text-sm">
+      El gimnasio de tu barrio
+    </p>
+    <h1 class="mt-3 text-4xl sm:text-6xl font-extrabold tracking-tight">
+      Entrená tu <span class="neon-text">UNO%</span> mejor, cada día
+    </h1>
+    <p class="mt-5 text-zinc-400 max-w-2xl mx-auto text-lg">
+      Cerca de tu casa, con equipamiento completo, buena onda y planes pensados
+      para que arranques hoy mismo.
+    </p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <a routerLink="/register" class="neon-button rounded-lg px-6 py-3 font-semibold">
+        Quiero sumarme
+      </a>
+      <a
+        href="#planes"
+        class="rounded-lg border border-zinc-700 px-6 py-3 font-semibold text-zinc-100 hover:border-neon-red transition"
+      >
+        Ver planes
       </a>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="py-20 bg-neutral-900 px-4">
-    <div class="max-w-7xl mx-auto">
-      <h2 class="text-3xl md:text-4xl font-bold text-white text-center mb-16 uppercase italic">¿Por qué elegirnos?</h2>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        @for (feature of features; track feature.title) {
-          <div class="bg-black p-8 rounded-lg border border-neutral-800 hover:border-red-600 transition-colors">
-            <h3 class="text-xl font-bold text-red-500 mb-3">{{ feature.title }}</h3>
-            <p class="text-gray-400">{{ feature.desc }}</p>
-          </div>
-        }
-      </div>
-    </div>
-  </section>
-
-  <section class="py-20 bg-neutral-950 px-4">
-    <div class="max-w-7xl mx-auto">
-      <h2 class="text-3xl md:text-4xl font-bold text-white text-center mb-16 uppercase italic">Nuestros Planes</h2>
-      
-      @if (loadingPlans()) {
-        <div class="text-center text-red-500 font-bold animate-pulse text-xl">
-          Cargando planes disponibles...
-        </div>
-      } @else {
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          @for (plan of plans(); track plan.id) {
-            <div class="bg-neutral-900 border border-neutral-800 p-8 rounded-lg flex flex-col justify-between hover:shadow-[0_0_20px_rgba(220,38,38,0.2)] transition-shadow">
-              <div>
-                <h3 class="text-2xl font-bold text-white mb-2">{{ plan.name }}</h3>
-                <p class="text-4xl font-black text-red-600 mb-6">${{ plan.price }}</p>
-                <p class="text-gray-400 font-medium">{{ plan.durationDays }} días de acceso total a las instalaciones.</p>
-              </div>
-              <button class="mt-8 w-full py-3 border border-red-600 text-red-500 font-bold rounded hover:bg-red-600 hover:text-white transition-colors">
-                Seleccionar Plan
-              </button>
-            </div>
-          }
+<section class="bg-zinc-950 text-white">
+  <div class="mx-auto max-w-6xl px-4 py-16">
+    <h2 class="text-2xl sm:text-3xl font-bold text-center">Qué te ofrece Uno%</h2>
+    <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      @for (f of features; track f.title) {
+        <div
+          class="rounded-2xl border border-zinc-800 bg-black p-6 transition hover:neon-border"
+        >
+          <h3 class="font-semibold neon-text">{{ f.title }}</h3>
+          <p class="mt-2 text-sm text-zinc-400">{{ f.desc }}</p>
         </div>
       }
     </div>
-  </section>
-</div>
+  </div>
+</section>
+
+<section id="planes" class="bg-black text-white">
+  <div class="mx-auto max-w-6xl px-4 py-16">
+    <h2 class="text-2xl sm:text-3xl font-bold text-center">Planes</h2>
+    <p class="mt-2 text-center text-zinc-400">Elegí el que mejor se adapte a vos</p>
+
+    @if (loadingPlans()) {
+      <p class="mt-10 text-center text-zinc-500">Cargando planes…</p>
+    } @else if (plans().length === 0) {
+      <p class="mt-10 text-center text-zinc-500">
+        Todavía no hay planes cargados. Volvé a intentarlo más tarde.
+      </p>
+    } @else {
+      <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        @for (plan of plans(); track plan.id) {
+          <div
+            class="rounded-2xl border border-zinc-800 bg-zinc-950 p-6 flex flex-col transition hover:neon-border"
+          >
+            <h3 class="text-lg font-bold">{{ plan.name }}</h3>
+            <p class="mt-2 text-sm text-zinc-400 flex-1">{{ plan.description }}</p>
+            <p class="mt-4 text-3xl font-extrabold neon-text">${{ plan.price }}</p>
+            <p class="text-xs text-zinc-500">
+              @if (plan.durationDays === 1) {
+                pase por un día
+              } @else {
+                cada {{ plan.durationDays }} días
+              }
+            </p>
+            <a
+              routerLink="/register"
+              class="neon-button mt-5 rounded-lg px-4 py-2 text-center font-semibold"
+            >
+              Elegir plan
+            </a>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<section class="bg-zinc-950 text-white">
+  <div class="mx-auto max-w-6xl px-4 py-16 grid gap-10 sm:grid-cols-2">
+    <div>
+      <h2 class="text-2xl sm:text-3xl font-bold">Horarios</h2>
+      <ul class="mt-6 space-y-3">
+        @for (s of schedule; track s.day) {
+          <li class="flex justify-between border-b border-zinc-800 pb-2 text-zinc-300">
+            <span>{{ s.day }}</span>
+            <span class="font-medium text-white">{{ s.hours }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+    <div>
+      <h2 class="text-2xl sm:text-3xl font-bold">Contacto</h2>
+      <p class="mt-6 text-zinc-300">📍 Pasco 649, San Cristobal</p>
+      <p class="mt-2 text-zinc-300">📞 01137818940</p>
+      <p class="mt-2 text-zinc-300">📸 &#64;unoporciento.gym</p>
+    </div>
+  </div>
+</section>
+
+<section class="bg-black text-white">
+  <div class="mx-auto max-w-6xl px-4 py-16">
+    <h2 class="text-2xl sm:text-3xl font-bold text-center">Seguinos en Instagram</h2>
+    <p class="mt-2 text-center text-zinc-400">&#64;unoporciento.gym</p>
+
+    @if (loadingInstagram()) {
+      <p class="mt-10 text-center text-zinc-500">Cargando publicaciones…</p>
+    } @else if (!instagramConfigured()) {
+      <p class="mt-10 text-center text-zinc-500 max-w-md mx-auto">
+        El feed todavía no está conectado. Se activa configurando una cuenta de
+        Instagram Business vinculada al backend.
+      </p>
+    } @else if (instagramPosts().length === 0) {
+      <p class="mt-10 text-center text-zinc-500"> </p>
+    } @else {
+      <div class="mt-10 grid grid-cols-2 sm:grid-cols-3 gap-4">
+        @for (post of instagramPosts(); track post.id) {
+          <a
+            [href]="post.permalink"
+            target="_blank"
+            rel="noopener"
+            class="group relative aspect-square overflow-hidden rounded-xl border border-zinc-800 hover:neon-border transition"
+          >
+            <img
+              [src]="post.thumbnailUrl || post.mediaUrl"
+              [alt]="post.caption || 'Publicación de Instagram'"
+              class="h-full w-full object-cover transition group-hover:scale-105"
+            />
+          </a>
+        }
+      </div>
+    }
+  </div>
+</section>

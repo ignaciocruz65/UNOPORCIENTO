@@ -1,43 +1,76 @@
 import { Component, inject, signal } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
+
+// Valida que password y confirmPassword coincidan. Se aplica a nivel de
+// formulario para poder marcar el error en el campo de confirmación.
+function passwordsMatchValidator(): ValidatorFn {
+  return (group: AbstractControl): ValidationErrors | null => {
+    const password = group.get('password')?.value;
+    const confirmPassword = group.get('confirmPassword')?.value;
+    if (!password || !confirmPassword) return null;
+    return password === confirmPassword ? null : { passwordMismatch: true };
+  };
+}
 
 @Component({
   selector: 'app-register',
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
-  templateUrl: './register.html'
+  templateUrl: './register.html',
 })
 export class Register {
-  private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
-  private router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
 
-  isLoading = signal(false);
-  errorMessage = signal<string | null>(null);
+  readonly loading = signal(false);
+  readonly errorMessage = signal<string | null>(null);
 
-  registerForm = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(3)]],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
-  });
+  readonly form = this.fb.nonNullable.group(
+    {
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: [''],
+      dni: ['', [Validators.required, Validators.pattern(/^\d{7,9}$/)]],
+      birthDate: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required]],
+    },
+    { validators: passwordsMatchValidator() },
+  );
 
-  onSubmit() {
-    if (this.registerForm.invalid) return;
+  submit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-    this.isLoading.set(true);
+    this.loading.set(true);
     this.errorMessage.set(null);
 
-    this.authService.register(this.registerForm.getRawValue() as any).subscribe({
+    const { confirmPassword, ...payload } = this.form.getRawValue();
+
+    this.auth.register(payload).subscribe({
       next: () => {
-        this.isLoading.set(false);
-        this.router.navigate(['/']); 
+        this.loading.set(false);
+        this.router.navigate(['/']);
       },
       error: (err) => {
-        this.isLoading.set(false);
-        this.errorMessage.set('Error al registrar. Puede que el correo ya esté en uso.');
-      }
+        this.loading.set(false);
+        this.errorMessage.set(
+          err?.error?.message ?? 'No pudimos crear tu cuenta. Probá de nuevo.',
+        );
+      },
     });
   }
 }

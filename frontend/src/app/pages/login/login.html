@@ -1,43 +1,49 @@
-<div class="min-h-screen bg-black flex items-center justify-center py-12 px-4 pt-20">
-  <div class="max-w-md w-full bg-neutral-900 border border-neutral-800 p-8 rounded-lg shadow-2xl">
-    <div class="text-center mb-8">
-      <h2 class="text-3xl font-black text-white uppercase italic">Ingresar</h2>
-      <p class="text-gray-400 mt-2">Accedé a tu panel de socio</p>
-    </div>
+<section class="min-h-[80vh] bg-black text-white flex items-center justify-center px-4 py-16">
+  <div class="w-full max-w-sm">
+    <h1 class="text-2xl font-bold text-center">Ingresar</h1>
+    <p class="mt-1 text-center text-zinc-400 text-sm">
+      Accedé a tu cuenta de Uno%
+    </p>
 
-    @if (errorMessage()) {
-      <div class="mb-6 p-4 bg-red-900/50 border border-red-500 text-red-200 rounded text-sm text-center">
-        {{ errorMessage() }}
-      </div>
-    }
-
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
+    <form [formGroup]="form" (ngSubmit)="submit()" class="mt-8 space-y-4">
       <div>
-        <label class="block text-sm font-bold text-gray-300 mb-2">Correo Electrónico</label>
-        <input type="email" formControlName="email"
-               class="w-full bg-black border border-neutral-700 rounded px-4 py-3 text-white focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-all"
-               placeholder="tu@email.com">
+        <label class="block text-sm text-zinc-300 mb-1">Email</label>
+        <input
+          type="email"
+          formControlName="email"
+          class="w-full rounded-lg bg-zinc-950 border border-zinc-700 px-3 py-2 text-white focus:outline-none focus:border-neon-red focus:neon-border transition"
+          placeholder="tu&#64;email.com"
+        />
       </div>
 
       <div>
-        <label class="block text-sm font-bold text-gray-300 mb-2">Contraseña</label>
-        <input type="password" formControlName="password"
-               class="w-full bg-black border border-neutral-700 rounded px-4 py-3 text-white focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-all"
-               placeholder="••••••••">
+        <label class="block text-sm text-zinc-300 mb-1">Contraseña</label>
+        <input
+          type="password"
+          formControlName="password"
+          class="w-full rounded-lg bg-zinc-950 border border-zinc-700 px-3 py-2 text-white focus:outline-none focus:border-neon-red focus:neon-border transition"
+          placeholder="••••••••"
+        />
       </div>
 
-      <button type="submit" [disabled]="loginForm.invalid || isLoading()"
-              class="w-full py-3 bg-red-600 text-white font-bold rounded uppercase hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex justify-center">
-        @if (isLoading()) {
-          <span class="animate-pulse">Verificando...</span>
-        } @else {
-          <span>Entrar</span>
-        }
+      @if (errorMessage()) {
+        <p class="text-sm text-red-400">{{ errorMessage() }}</p>
+      }
+
+      <button
+        type="submit"
+        [disabled]="loading()"
+        class="neon-button w-full rounded-lg px-4 py-2.5 font-semibold disabled:opacity-60"
+      >
+        {{ loading() ? 'Ingresando…' : 'Ingresar' }}
       </button>
     </form>
 
-    <p class="mt-6 text-center text-gray-400 text-sm">
-      ¿No tenés cuenta? <a routerLink="/register" class="text-red-500 font-bold hover:underline">Registrate acá</a>
+    <p class="mt-6 text-center text-sm text-zinc-400">
+      ¿Todavía no tenés cuenta?
+      <a routerLink="/register" class="neon-text font-medium hover:underline">
+        Registrate
+      </a>
     </p>
   </div>
-</div>
+</section>

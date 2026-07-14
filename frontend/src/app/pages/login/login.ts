@@ -7,38 +7,41 @@ import { AuthService } from '../../core/services/auth.service';
   selector: 'app-login',
   standalone: true,
   imports: [ReactiveFormsModule, RouterLink],
-  templateUrl: './login.html'
+  templateUrl: './login.html',
 })
 export class Login {
-  private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
-  private router = inject(Router);
+  private readonly fb = inject(FormBuilder);
+  private readonly auth = inject(AuthService);
+  private readonly router = inject(Router);
 
-  // Señales para manejar estados de la interfaz
-  isLoading = signal(false);
-  errorMessage = signal<string | null>(null);
+  readonly loading = signal(false);
+  readonly errorMessage = signal<string | null>(null);
 
-  loginForm = this.fb.group({
+  readonly form = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]]
+    password: ['', [Validators.required]],
   });
 
-  onSubmit() {
-    if (this.loginForm.invalid) return;
+  submit(): void {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-    this.isLoading.set(true);
+    this.loading.set(true);
     this.errorMessage.set(null);
 
-    // Llamamos al AuthService y enviamos el payload
-    this.authService.login(this.loginForm.getRawValue() as any).subscribe({
+    this.auth.login(this.form.getRawValue()).subscribe({
       next: () => {
-        this.isLoading.set(false);
-        this.router.navigate(['/']); // Redirigimos al inicio si hay éxito
+        this.loading.set(false);
+        this.router.navigate(['/']);
       },
       error: (err) => {
-        this.isLoading.set(false);
-        this.errorMessage.set('Credenciales incorrectas. Intentá nuevamente.');
-      }
+        this.loading.set(false);
+        this.errorMessage.set(
+          err?.error?.message ?? 'No pudimos iniciar sesión. Revisá tus datos.',
+        );
+      },
     });
   }
 }

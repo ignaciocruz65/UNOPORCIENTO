@@ -1,3 +1,75 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+
+@theme {
+  --color-neon-red: #ff1744;
+  --color-neon-red-dim: #b3001d;
+  --color-neon-bg: #0a0505;
+}
+
+html,
+body {
+  background-color: var(--color-neon-bg);
+  color: #f4f4f5;
+}
+
+/* Texto con brillo neón, para títulos y acentos */
+.neon-text {
+  color: var(--color-neon-red);
+  text-shadow:
+    0 0 4px rgba(255, 23, 68, 0.8),
+    0 0 14px rgba(255, 23, 68, 0.55),
+    0 0 30px rgba(255, 23, 68, 0.35);
+}
+
+/* Borde con resplandor, para cards y contenedores destacados */
+.neon-border {
+  border-color: var(--color-neon-red);
+  box-shadow:
+    0 0 6px rgba(255, 23, 68, 0.45),
+    0 0 20px rgba(255, 23, 68, 0.2);
+}
+
+/* Botón principal con efecto neón, más intenso al hover */
+.neon-button {
+  background-color: var(--color-neon-red);
+  color: #0a0505;
+  box-shadow:
+    0 0 10px rgba(255, 23, 68, 0.55),
+    0 0 26px rgba(255, 23, 68, 0.3);
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.neon-button:hover {
+  background-color: #ff4569;
+  box-shadow:
+    0 0 16px rgba(255, 23, 68, 0.8),
+    0 0 40px rgba(255, 23, 68, 0.45);
+  transform: translateY(-1px);
+}
+
+/* Transiciones suaves entre páginas usando la View Transitions API
+   nativa (activada en el router con withViewTransitions). */
+::view-transition-old(root) {
+  animation: unoporciento-fade-out 0.18s ease both;
+}
+
+::view-transition-new(root) {
+  animation: unoporciento-fade-in 0.28s ease both;
+}
+
+@keyframes unoporciento-fade-out {
+  to {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes unoporciento-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}

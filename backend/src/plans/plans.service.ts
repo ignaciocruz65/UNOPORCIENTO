@@ -52,6 +52,10 @@ export class PlansService implements OnModuleInit {
     return this.plansRepository.find({ order: { price: 'ASC' } });
   }
 
+  findById(id: string): Promise<Plan | null> {
+    return this.plansRepository.findOne({ where: { id } });
+  }
+
   create(dto: CreatePlanDto): Promise<Plan> {
     const plan = this.plansRepository.create(dto);
     return this.plansRepository.save(plan);
