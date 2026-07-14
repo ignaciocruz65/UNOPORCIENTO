@@ -7,7 +7,7 @@ ingreso por QR y turnos programados.
 ## Stack
 
 - **Backend**: NestJS 11 + TypeORM + SQLite (`better-sqlite3`) + JWT (Passport) + `@nestjs/schedule`
-- **Frontend**: Angular 21 (standalone, SSR, View Transitions) + Tailwind CSS 4 (tema neon rojo)
+- **Frontend**: Angular 21 + Tailwind CSS 4
 
 ## Estructura
 
